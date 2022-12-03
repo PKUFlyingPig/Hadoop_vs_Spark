@@ -5,7 +5,7 @@ def logistic(z):
     return 1 / (1 + np.exp(-z))
 
 def save(outfile, X, y):
-    data = np.hstack([X, y.reshape(y.size, -1)])
+    data = np.hstack([y.reshape(y.size, -1), X])
     with open(outfile, "w") as f:
         writer = csv.writer(f, delimiter=' ')
         for row in data:
@@ -15,9 +15,9 @@ def generate(n, theta, deterministic=False, seed=1):
     # Number of features.
     dim = len(theta)
 
-    # Generate feature values from U[0,100].
+    # Generate feature values from U[0,1].
     np.random.seed(seed)
-    X = np.random.uniform(0, 100, (n, dim))
+    X = np.random.rand(n, dim)
 
     # Calculate logits.
     z = np.dot(X, theta)
@@ -35,7 +35,7 @@ def generate(n, theta, deterministic=False, seed=1):
    
 if __name__ == "__main__":
     # True theta coefficients.
-    theta = np.array([[4], [-2]])
-    X, y = generate(10, theta)
+    theta = np.random.rand(10)
+    X, y = generate(5300, theta)
     save("default.csv", X, y)
 
