@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 import csv
 
@@ -34,8 +35,14 @@ def generate(n, theta, deterministic=False, seed=1):
     return X, y
    
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--size", type=int, default=1, help="The size (M) of the generated dataset.")
+    args = parser.parse_args()
+
+    n = 5300 * args.size # 5300 points => 1M
+
     # True theta coefficients.
     theta = np.random.rand(10)
-    X, y = generate(5300, theta)
-    save("default.csv", X, y)
+    X, y = generate(n, theta)
+    save(f"{args.size}M.csv", X, y)
 

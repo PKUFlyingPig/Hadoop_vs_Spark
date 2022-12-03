@@ -1,4 +1,5 @@
 import sys
+import time
 from typing import Iterable, List
 
 import numpy as np
@@ -28,31 +29,42 @@ def add(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     x += y
     return x
 
+def run_one_case(spark, filename, iterations):
+    start = time.time()
+
+    points = spark.read.text(filename).rdd.map(lambda r: r[0])\
+        .mapPartitions(readPointBatch).cache()
+
+    # Initialize w to a random value
+    w = np.random.ranf(size=D)
+
+    for i in range(iterations):
+        w -= points.map(lambda m: gradient(m, w)).reduce(add)
+
+    return time.time() - start
+
+
 if __name__ == "__main__":
-
-    if len(sys.argv) != 3:
-        print("Usage: logistic_regression <file> <iterations>", file=sys.stderr)
+    if len(sys.argv) != 2:
+        print("Usage: logistic_regression <iterations>", file=sys.stderr)
         sys.exit(-1)
-
+    
+    size_list = [1, 4, 16, 64, 128]
+    iterations = int(sys.argv[1])
     spark = SparkSession\
         .builder\
         .appName("PythonLR")\
         .getOrCreate()
+    
+    #warmup
+    warmup_file = f"hdfs:///dataset/default.csv"
+    warmup_time = run_one_case(spark, warmup_file, iterations)
+    print(f"warmup time: {warmup_time:.5f}s")
+    for s in size_list:
+        filename = f"hdfs:///dataset/{s}M.csv"
+        benchmark_time = run_one_case(spark, filename, iterations)
+        print(f"{s}M case: {benchmark_time:.5f}s")
 
-    # filename = "hdfs:///dataset/test.csv"
-
-    points = spark.read.text(sys.argv[1]).rdd.map(lambda r: r[0])\
-        .mapPartitions(readPointBatch).cache()
-    iterations = int(sys.argv[2])
-
-
-    Initialize w to a random value
-    w = 2 * np.random.ranf(size=D) - 1
-    # print("Initial w: " + str(w))
-
-    for i in range(iterations):
-        w -= points.map(lambda m: gradient(m, w)).reduce(add)
-        # print("On iteration %i: " % (i + 1) + str(w))
-
-    # print("Final w: " + str(w))
     spark.stop()
+
+
