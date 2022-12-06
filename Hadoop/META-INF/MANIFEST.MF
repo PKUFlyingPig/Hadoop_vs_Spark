@@ -1,0 +1,71 @@
+Manifest-Version: 1.0
+Class-Path: kerb-server-1.0.1.jar jaxb-api-2.2.11.jar websocket-client-9
+ .4.43.v20210629.jar jsp-api-2.1.jar stax2-api-4.2.1.jar netty-common-4.
+ 1.77.Final.jar jetty-http-9.4.43.v20210629.jar kerb-core-1.0.1.jar zook
+ eeper-3.5.6.jar netty-transport-rxtx-4.1.77.Final.jar jetty-webapp-9.4.
+ 43.v20210629.jar jline-3.9.0.jar netty-codec-dns-4.1.77.Final.jar netty
+ -3.10.6.Final.jar servlet-api-2.5-20081211.jar paranamer-2.3.jar jsp-ap
+ i-2.1-6.1.14.jar commons-configuration2-2.1.1.jar hadoop-mapreduce-clie
+ nt-core-3.3.4.jar jersey-core-1.19.jar gson-2.8.9.jar jersey-json-1.19.
+ jar httpcore-4.4.13.jar commons-text-1.4.jar kerby-pkix-1.0.1.jar anima
+ l-sniffer-annotations-1.17.jar hadoop-common-3.3.4.jar jcip-annotations
+ -1.0-1.jar kerb-common-1.0.1.jar commons-lang-2.4.jar netty-transport-s
+ ctp-4.1.77.Final.jar jetty-util-9.4.43.v20210629.jar token-provider-1.0
+ .1.jar commons-configuration-1.6.jar netty-codec-socks-4.1.77.Final.jar
+  jackson-core-asl-1.9.2.jar jackson-annotations-2.12.7.jar log4j-1.2.17
+ .jar slf4j-reload4j-1.7.36.jar jakarta.activation-api-1.2.1.jar jackson
+ -module-jaxb-annotations-2.12.7.jar javax.servlet-api-3.1.0.jar jersey-
+ servlet-1.19.jar jackson-mapper-asl-1.8.8.jar netty-codec-4.1.77.Final.
+ jar jackson-jaxrs-json-provider-2.12.7.jar jsch-0.1.55.jar netty-codec-
+ http-4.1.77.Final.jar netty-codec-redis-4.1.77.Final.jar jetty-util-6.1
+ .26.jar commons-net-3.6.jar kerby-config-1.0.1.jar jetty-security-9.4.4
+ 3.v20210629.jar kerb-identity-1.0.1.jar snappy-java-1.1.8.2.jar netty-t
+ ransport-classes-epoll-4.1.77.Final.jar netty-codec-memcache-4.1.77.Fin
+ al.jar curator-client-4.2.0.jar netty-resolver-dns-4.1.77.Final.jar com
+ mons-logging-1.1.3.jar netty-transport-native-epoll-4.1.77.Final-linux-
+ x86_64.jar commons-lang3-3.12.0.jar kerby-asn1-1.0.1.jar hadoop-auth-3.
+ 3.4.jar reload4j-1.2.22.jar jetty-io-9.4.43.v20210629.jar ant-1.6.5.jar
+  netty-transport-native-kqueue-4.1.77.Final-osx-aarch_64.jar jasper-run
+ time-5.5.12.jar curator-framework-4.2.0.jar listenablefuture-9999.0-emp
+ ty-to-avoid-conflict-with-guava.jar jetty-6.1.26.jar hadoop-yarn-api-3.
+ 3.4.jar jersey-client-1.19.jar jetty-xml-9.4.43.v20210629.jar woodstox-
+ core-5.3.0.jar audience-annotations-0.5.0.jar netty-all-4.1.77.Final.ja
+ r nimbus-jose-jwt-9.8.1.jar kerby-util-1.0.1.jar xmlenc-0.52.jar hadoop
+ -yarn-common-3.3.4.jar hsqldb-1.8.0.10.jar hadoop-client-3.3.4.jar json
+ -smart-2.4.7.jar jackson-xc-1.9.2.jar accessors-smart-2.4.7.jar netty-r
+ esolver-4.1.77.Final.jar commons-cli-1.2.jar asm-9.1.jar websocket-api-
+ 9.4.43.v20210629.jar kerb-crypto-1.0.1.jar hadoop-hdfs-client-3.3.4.jar
+  commons-math3-3.1.1.jar commons-beanutils-1.9.4.jar avro-1.7.7.jar ker
+ b-simplekdc-1.0.1.jar hadoop-mapreduce-client-common-3.3.4.jar commons-
+ compress-1.21.jar kerb-util-1.0.1.jar jackson-databind-2.12.7.jar hadoo
+ p-shaded-guava-1.1.1.jar jettison-1.1.jar netty-transport-4.1.77.Final.
+ jar hadoop-core-1.2.1.jar protobuf-java-2.5.0.jar jets3t-0.6.1.jar jack
+ son-jaxrs-1.9.2.jar commons-httpclient-3.0.1.jar jsr311-api-1.1.1.jar n
+ etty-handler-4.1.42.Final.jar commons-codec-1.15.jar netty-handler-prox
+ y-4.1.77.Final.jar jaxb-impl-2.2.3-1.jar jasper-compiler-5.5.12.jar net
+ ty-transport-udt-4.1.77.Final.jar jsp-2.1-6.1.14.jar core-3.1.1.jar j2o
+ bjc-annotations-1.1.jar commons-collections-3.2.2.jar netty-codec-mqtt-
+ 4.1.77.Final.jar re2j-1.1.jar curator-recipes-4.2.0.jar jsr305-3.0.2.ja
+ r hadoop-mapreduce-client-jobclient-3.3.4.jar jackson-core-2.12.7.jar w
+ ebsocket-common-9.4.43.v20210629.jar jetty-util-ajax-9.4.43.v20210629.j
+ ar netty-transport-native-epoll-4.1.42.Final.jar slf4j-log4j12-1.7.25.j
+ ar leveldbjni-all-1.8.jar kerb-client-1.0.1.jar netty-codec-http2-4.1.7
+ 7.Final.jar jakarta.xml.bind-api-2.3.2.jar hadoop-annotations-3.3.4.jar
+  httpclient-4.5.13.jar netty-codec-xml-4.1.77.Final.jar checker-qual-2.
+ 5.2.jar commons-beanutils-core-1.8.0.jar commons-io-2.8.0.jar commons-d
+ igester-1.8.jar commons-daemon-1.0.13.jar netty-codec-haproxy-4.1.77.Fi
+ nal.jar hadoop-yarn-client-3.3.4.jar netty-transport-native-epoll-4.1.7
+ 7.Final-linux-aarch_64.jar slf4j-api-1.7.36.jar jackson-jaxrs-base-2.12
+ .7.jar zookeeper-jute-3.5.6.jar hadoop-shaded-protobuf_3_7-1.1.1.jar gu
+ ava-27.0-jre.jar netty-transport-native-kqueue-4.1.77.Final-osx-x86_64.
+ jar jetty-servlet-9.4.43.v20210629.jar hadoop-hdfs-3.3.4.jar jetty-clie
+ nt-9.4.43.v20210629.jar commons-el-1.0.jar oro-2.0.8.jar netty-transpor
+ t-classes-kqueue-4.1.77.Final.jar jersey-server-1.19.jar netty-resolver
+ -dns-classes-macos-4.1.77.Final.jar netty-resolver-dns-native-macos-4.1
+ .77.Final-osx-x86_64.jar servlet-api-2.5-6.1.14.jar netty-codec-smtp-4.
+ 1.77.Final.jar netty-transport-native-unix-common-4.1.77.Final.jar kerb
+ y-xdr-1.0.1.jar commons-math-2.1.jar junit-3.8.1.jar netty-codec-stomp-
+ 4.1.77.Final.jar kerb-admin-1.0.1.jar netty-resolver-dns-native-macos-4
+ .1.77.Final-osx-aarch_64.jar dnsjava-2.1.7.jar netty-buffer-4.1.77.Fina
+ l.jar jetty-server-9.4.43.v20210629.jar failureaccess-1.0.jar
+
