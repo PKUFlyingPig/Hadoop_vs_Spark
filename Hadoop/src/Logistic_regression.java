@@ -134,13 +134,14 @@ public class Logistic_regression {
         Path outpath = new Path("/LR-Output");
         //parse input args: dims, iterations
         int iterations = 10;
-        if(args.length != 2) {
-            System.out.println("Usage: hadoop jar .jar <dims> <iterations>");
+        if(args.length != 3) {
+            System.out.println("Usage: hadoop jar .jar <dims> <iterations> <input path>");
             return;
         }
         else {
             dims = Integer.parseInt(args[0]);
             iterations = Integer.parseInt(args[1]);
+            inpath = new Path(args[2]);
         }
 
         if (fs.exists(outpath)) {
@@ -150,9 +151,16 @@ public class Logistic_regression {
         long startTime = System.currentTimeMillis();
         System.out.println("[INFO] Dimensions: " + dims);
         System.out.println("[INFO] Iterations: " + iterations);
-        for (int i = 0; i < iterations; i++) {
-            Job job = Job.getInstance(conf, "LR Job");
+        // record execution time of each iteration
+        ArrayList<Long> time = new ArrayList<>();
 
+        // set map task number to 16
+        for (int i = 0; i < iterations; i++) {
+            long start = System.currentTimeMillis();
+            conf.set("mapreduce.job.maps", "16");
+            //set split size
+            conf.setLong("mapred.max.split.size", 1024 * 1024);
+            Job job = Job.getInstance(conf, "LR Job");
             job.setJarByClass(Logistic_regression.class);
             job.setMapperClass(LRMapper.class);
             job.setReducerClass(LRReducer.class);
@@ -164,9 +172,22 @@ public class Logistic_regression {
             FileOutputFormat.setOutputPath(job, new Path("/LR-Output/" + curItr));
             job.waitForCompletion(true);
             curItr++;
+            long end = System.currentTimeMillis();
+            time.add(end - start);
         }
         long endTime = System.currentTimeMillis();
-        System.out.println("Job took " + (endTime - startTime) / 1000.0 + " seconds to complete.");
+        System.out.println("Job took " + (endTime - startTime)/1000.0 + " seconds to complete.");
+        System.out.println("Input path: " + inpath);
+        System.out.println("Iteration time:");
+        for(int i = 0; i < time.size(); i++) {
+            System.out.print(time.get(i));
+            if(i != time.size() - 1) {
+                System.out.print(", ");
+            }
+            else {
+                System.out.println();
+            }
+        }
         System.exit(0);
     }
 }
