@@ -24,6 +24,7 @@ import static java.lang.Math.exp;
 
 public class Logistic_regression {
     private static Integer dims = 10;
+    private static Integer curItr = 0;
 
     public static Float dotProduct(ArrayList<Float> x, ArrayList<Float> y) {
         Float sum = 0.0f;
@@ -43,7 +44,7 @@ public class Logistic_regression {
             FileSystem fs = FileSystem.get(conf);
             try {
                 FSDataInputStream fsInput =
-                        fs.open(new Path("/LR-Output/part-r-00000"));
+                        fs.open(new Path("/LR-Output/" + (curItr-1) + "/part-r-00000"));
                 InputStreamReader fsReader = new InputStreamReader(fsInput);
                 BufferedReader buffReader = new BufferedReader(fsReader);
 
@@ -69,7 +70,7 @@ public class Logistic_regression {
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
             String[] line = value.toString().split("\\s+");
-            int label = Integer.parseInt(line[0]);
+            Float label = Float.parseFloat(line[0]);
             ArrayList<Float> pos = new ArrayList<Float>();
             for (int i = 1; i < line.length; i++) {
                 pos.add(Float.parseFloat(line[i]));
@@ -131,18 +132,27 @@ public class Logistic_regression {
         FileSystem fs = FileSystem.get(uri, conf);
         Path inpath = new Path("/LR-Input");
         Path outpath = new Path("/LR-Output");
+        //parse input args: dims, iterations
+        int iterations = 10;
+        if(args.length != 2) {
+            System.out.println("Usage: hadoop jar .jar <dims> <iterations>");
+            return;
+        }
+        else {
+            dims = Integer.parseInt(args[0]);
+            iterations = Integer.parseInt(args[1]);
+        }
 
         if (fs.exists(outpath)) {
             fs.delete(outpath, true);
         }
 
         long startTime = System.currentTimeMillis();
-        dims = 10;
-        int iterations = 10;
         System.out.println("[INFO] Dimensions: " + dims);
         System.out.println("[INFO] Iterations: " + iterations);
         for (int i = 0; i < iterations; i++) {
             Job job = Job.getInstance(conf, "LR Job");
+
             job.setJarByClass(Logistic_regression.class);
             job.setMapperClass(LRMapper.class);
             job.setReducerClass(LRReducer.class);
@@ -150,9 +160,10 @@ public class Logistic_regression {
             job.setOutputValueClass(Text.class);
             job.setMapOutputKeyClass(Text.class);
             job.setMapOutputValueClass(Text.class);
-            FileInputFormat.addInputPath(job, new Path("/LR-Input"));
-            FileOutputFormat.setOutputPath(job, new Path("/LR-Output"));
+            FileInputFormat.addInputPath(job, inpath);
+            FileOutputFormat.setOutputPath(job, new Path("/LR-Output/" + curItr));
             job.waitForCompletion(true);
+            curItr++;
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Job took " + (endTime - startTime) / 1000.0 + " seconds to complete.");
