@@ -18,7 +18,15 @@ Both the Hadoop and Spark implementation use HDFS as the underlying storage laye
 
 ## Hadoop
 
-Todo
+Install Hadoop following the [installation guide](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html).
+
+Compile the Java code into jar.
+
+Run the script below:
+
+```shell
+Usage: hadoop jar Logistic_regression.jar <dims> <iterations> <input path>
+```
 
 ## Spark
 

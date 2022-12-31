@@ -3,9 +3,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -35,7 +33,7 @@ public class Logistic_regression {
     }
 
     public static class LRMapper
-            extends Mapper<Object, Text, Text, Text> {
+            extends Mapper<Object, Text, Text, MapWritable> {
 
         private ArrayList<Float> weights = new ArrayList<Float>();
         private ArrayList<Float> delta = new ArrayList<>();
@@ -92,28 +90,29 @@ public class Logistic_regression {
 
         }
         public void cleanup(Context context) throws IOException, InterruptedException {
-            String output = "";
+            MapWritable map = new MapWritable();
             for (int i = 0; i < delta.size(); i++) {
-                output += delta.get(i) + " ";
+                map.put(new IntWritable(i), new FloatWritable(delta.get(i)));
             }
-            context.write(new Text("1"), new Text(output));
+            context.write(new Text("1"), map);
         }
     }
 
     public static class LRReducer
-            extends Reducer<Text, Text, Text, Text> {
+            extends Reducer<Text, MapWritable, Text, Text> {
 
-        public void reduce(Text key, Iterable<Text> values,
+        public void reduce(Text key, Iterable<MapWritable> values,
                            Context context
         ) throws IOException, InterruptedException {
             ArrayList<Float> delta = new ArrayList<>();
-            for (Text val : values) {
-                String[] line = val.toString().split("\\s+");
-                for (int i = 0; i < line.length; i++) {
+            for (MapWritable val : values) {
+                ArrayList<Float> tmp = new ArrayList<>();
+                for (int i = 0; i < dims; i++) {
+                    float f = ((FloatWritable)(val.get(new IntWritable(i)))).get();
                     if (delta.size() == i) {
-                        delta.add(Float.parseFloat(line[i]));
+                        delta.add(f);
                     } else {
-                        delta.set(i, delta.get(i) + Float.parseFloat(line[i]));
+                        delta.set(i, delta.get(i) + f);
                     }
                 }
             }
@@ -154,23 +153,22 @@ public class Logistic_regression {
         // record execution time of each iteration
         ArrayList<Long> time = new ArrayList<>();
 
-        // set map task number to 16
         for (int i = 0; i < iterations; i++) {
             long start = System.currentTimeMillis();
-            conf.set("mapreduce.job.maps", "16");
             //set split size
-            conf.setLong("mapred.max.split.size", 1024 * 1024);
-            Job job = Job.getInstance(conf, "LR Job");
+            Job job = Job.getInstance(conf, "File-" + inpath + "-Iteration-" + curItr);
+            FileInputFormat.setMaxInputSplitSize(job, 1024*1024*32);
             job.setJarByClass(Logistic_regression.class);
             job.setMapperClass(LRMapper.class);
             job.setReducerClass(LRReducer.class);
             job.setOutputKeyClass(Text.class);
             job.setOutputValueClass(Text.class);
             job.setMapOutputKeyClass(Text.class);
-            job.setMapOutputValueClass(Text.class);
+            job.setMapOutputValueClass(MapWritable.class);
             FileInputFormat.addInputPath(job, inpath);
             FileOutputFormat.setOutputPath(job, new Path("/LR-Output/" + curItr));
             job.waitForCompletion(true);
+            System.out.println("[INFO] Iteration " + curItr + " finished.");
             curItr++;
             long end = System.currentTimeMillis();
             time.add(end - start);
